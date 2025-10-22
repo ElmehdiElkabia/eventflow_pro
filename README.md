@@ -5,7 +5,7 @@ A modern full-stack event management application built with React, Laravel, and 
 ## 🚀 Tech Stack
 
 - **Frontend**: React 19 + Vite
-- **Backend**: Laravel 11 + PHP 8.2
+- **Backend**: Laravel 10 + PHP 8.2
 - **Database**: MySQL 8.0
 - **Server**: Nginx (Reverse Proxy)
 - **Containerization**: Docker & Docker Compose
@@ -14,7 +14,7 @@ A modern full-stack event management application built with React, Laravel, and 
 
 - Docker & Docker Compose installed
 - Git
-- Port 81 available on your machine
+- Port 8081 available on your machine
 
 ## 🛠️ Installation
 
