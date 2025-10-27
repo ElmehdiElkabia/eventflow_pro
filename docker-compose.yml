@@ -17,7 +17,7 @@ services:
     expose:
       - "8000"
     volumes:
-      - ./backend:/app
+      - ./backend:/var/www/html 
     environment:
       - DB_HOST=db
       - DB_PORT=3306
@@ -34,10 +34,10 @@ services:
     ports:
       - "3307:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${DB_DATABASE}
-      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_USER=${DB_USERNAME}
     volumes:
       - db-data:/var/lib/mysql
     networks:
