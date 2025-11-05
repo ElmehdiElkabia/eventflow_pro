@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\TicketController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +21,9 @@ use Illuminate\Support\Facades\Route;
 // 🟢 Public routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
+// 🟢 Public review routes (anyone can view approved reviews)
+Route::get('/events/{eventId}/reviews', [ReviewController::class, 'getEventReviews']);
 
 // 🔒 Protected routes (need Sanctum token)
 Route::middleware('auth:sanctum')->group(function () {
@@ -45,5 +50,38 @@ Route::middleware('auth:sanctum')->group(function () {
 		// Image management
 		Route::post('/events/{id}/images', [EventController::class, 'addImage']);      // Add image
 		Route::delete('/events/{id}/images', [EventController::class, 'removeImage']); // Remove image
+
+		// 🎫 TICKET CRUD ROUTES - Admin and Organizer only
+		// Tickets for specific event
+		Route::get('/events/{eventId}/tickets', [TicketController::class, 'index']);          // GET /api/events/1/tickets
+		Route::post('/events/{eventId}/tickets', [TicketController::class, 'store']);        // POST /api/events/1/tickets
+
+		// Individual ticket operations
+		Route::get('/tickets/{id}', [TicketController::class, 'show']);                      // GET /api/tickets/1
+		Route::put('/tickets/{id}', [TicketController::class, 'update']);                   // PUT /api/tickets/1
+		Route::delete('/tickets/{id}', [TicketController::class, 'destroy']);               // DELETE /api/tickets/1
+
+		// Ticket actions
+		Route::get('/tickets/{id}/statistics', [TicketController::class, 'statistics']);    // GET /api/tickets/1/statistics
+		Route::post('/tickets/{id}/duplicate', [TicketController::class, 'duplicate']);     // POST /api/tickets/1/duplicate
+
+
+	});
+	// ⭐ REVIEW CRUD ROUTES - Users can manage their own, Admin can manage all
+	Route::get('/reviews', [ReviewController::class, 'index']);                    // List user's reviews (or all for admin)
+	Route::post('/reviews', [ReviewController::class, 'store']);                  // Create review
+	Route::get('/reviews/{id}', [ReviewController::class, 'show']);               // Show review
+	Route::put('/reviews/{id}', [ReviewController::class, 'update']);             // Update review
+	Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']);         // Delete review
+
+	// 🟣 Admin-only routes
+	Route::middleware('role:super_admin')->group(function () {
+		Route::get('/tickets', [TicketController::class, 'allTickets']);
+		Route::post('/users/change-role', [AuthController::class, 'changeRole']);
+
+		// Review admin actions
+		Route::patch('/reviews/{id}/approve', [ReviewController::class, 'approve']);   // Approve review
+		Route::patch('/reviews/{id}/reject', [ReviewController::class, 'reject']);     // Reject review
+		Route::get('/reviews/statistics', [ReviewController::class, 'statistics']);    // Review statistics
 	});
 });
