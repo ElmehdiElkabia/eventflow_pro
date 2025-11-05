@@ -22,6 +22,7 @@ return new class extends Migration {
 			$table->integer('capacity');
 			$table->enum('status', ['draft', 'published', 'cancelled', 'completed'])->default('draft');
 			$table->string('banner', 255)->nullable();
+			$table->json('images')->nullable();
 			$table->timestamps();
 		});
 	}
