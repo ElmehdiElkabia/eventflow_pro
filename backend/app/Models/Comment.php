@@ -35,4 +35,42 @@ class Comment extends Model
 	{
 		return $this->hasMany(Comment::class, 'parent_id');
 	}
+
+	    // Get only approved replies
+    public function approvedReplies()
+    {
+        return $this->hasMany(Comment::class, 'parent_id')
+                   ->where('status', 'approved')
+                   ->with('user:id,name,avatar');
+    }
+
+    // Accessor for replies count
+    public function getRepliesCountAttribute()
+    {
+        return $this->replies()->count();
+    }
+
+    // Accessor to check if comment is a reply
+    public function getIsReplyAttribute()
+    {
+        return !is_null($this->parent_id);
+    }
+
+    // Scope for top-level comments (not replies)
+    public function scopeTopLevel($query)
+    {
+        return $query->whereNull('parent_id');
+    }
+
+    // Scope for approved comments
+    public function scopeApproved($query)
+    {
+        return $query->where('status', 'approved');
+    }
+
+    // Scope for pending comments
+    public function scopePending($query)
+    {
+        return $query->where('status', 'pending');
+    }
 }
