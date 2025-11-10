@@ -59,7 +59,7 @@ class CommentController extends Controller
             $query = Comment::with(['event:id,title', 'user:id,name,avatar', 'parent:id,content']);
             
             // If user is not admin, only show their own comments
-            if ($user->role !== 'super_admin') {
+            if (!$user->hasRole('super_admin')) {
                 $query->where('user_id', $user->id);
             }
             
@@ -193,7 +193,7 @@ class CommentController extends Controller
             ])->findOrFail($id);
             
             // Check if user can view this comment
-            if ($user->role !== 'super_admin' && $comment->user_id !== $user->id && $comment->status !== 'approved') {
+            if (!$user->hasRole('super_admin') && $comment->user_id !== $user->id && $comment->status !== 'approved') {
                 return response()->json([
                     'success' => false,
                     'message' => 'Comment not found or access denied'
@@ -225,7 +225,7 @@ class CommentController extends Controller
             $comment = Comment::findOrFail($id);
             
             // Check if user can edit this comment
-            if ($user->role !== 'super_admin' && $comment->user_id !== $user->id) {
+            if (!$user->hasRole('super_admin') && $comment->user_id !== $user->id) {
                 return response()->json([
                     'success' => false,
                     'message' => 'You can only edit your own comments'
@@ -285,7 +285,7 @@ class CommentController extends Controller
             $comment = Comment::findOrFail($id);
             
             // Check if user can delete this comment
-            if ($user->role !== 'super_admin' && $comment->user_id !== $user->id) {
+            if (!$user->hasRole('super_admin') && $comment->user_id !== $user->id) {
                 return response()->json([
                     'success' => false,
                     'message' => 'You can only delete your own comments'
@@ -360,7 +360,7 @@ class CommentController extends Controller
         try {
             $user = Auth::user();
             
-            if ($user->role !== 'super_admin') {
+            if (!$user->hasRole('super_admin')) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Only administrators can approve comments'
@@ -394,7 +394,7 @@ class CommentController extends Controller
         try {
             $user = Auth::user();
             
-            if ($user->role !== 'super_admin') {
+            if (!$user->hasRole('super_admin')) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Only administrators can reject comments'
@@ -428,7 +428,7 @@ class CommentController extends Controller
         try {
             $user = Auth::user();
             
-            if ($user->role !== 'super_admin') {
+            if (!$user->hasRole('super_admin')) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Only administrators can view comment statistics'

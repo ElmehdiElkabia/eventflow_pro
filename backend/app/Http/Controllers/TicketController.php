@@ -286,7 +286,7 @@ class TicketController extends Controller
             $user = Auth::user();
             
             // Only admin can view all tickets
-            if ($user->role !== 'super_admin') {
+            if (!$user->hasRole('super_admin')) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Only administrators can view all tickets'

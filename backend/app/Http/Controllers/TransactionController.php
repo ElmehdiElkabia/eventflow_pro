@@ -24,7 +24,7 @@ class TransactionController extends Controller
             $query = Transaction::with(['ticket:id,name,price,type', 'event:id,title,start_date']);
             
             // Users see only their transactions, admins see all
-            if ($user->role !== 'super_admin') {
+            if (!$user->hasRole('super_admin')) {
                 $query->where('user_id', $user->id);
             }
             
@@ -215,7 +215,7 @@ class TransactionController extends Controller
             ])->findOrFail($id);
             
             // Check access permissions
-            if ($user->role !== 'super_admin' && $transaction->user_id !== $user->id) {
+            if (!$user->hasRole('super_admin') && $transaction->user_id !== $user->id) {
                 return response()->json([
                     'success' => false,
                     'message' => 'You can only view your own transactions'
@@ -247,7 +247,7 @@ class TransactionController extends Controller
             $transaction = Transaction::with(['ticket', 'event'])->findOrFail($id);
             
             // Check access permissions
-            if ($user->role !== 'super_admin' && $transaction->user_id !== $user->id) {
+            if (!$user->hasRole('super_admin') && $transaction->user_id !== $user->id) {
                 return response()->json([
                     'success' => false,
                     'message' => 'You can only refund your own transactions'

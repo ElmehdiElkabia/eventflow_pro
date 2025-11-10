@@ -22,7 +22,7 @@ class UserController extends Controller
             $user = Auth::user();
             
             // Only admin can view all users
-            if ($user->role !== 'super_admin') {
+            if (!$user->hasRole('super_admin')) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Only administrators can view user list'
@@ -87,7 +87,7 @@ class UserController extends Controller
         try {
             $user = Auth::user();
             
-            if ($user->role !== 'super_admin') {
+            if (!$user->hasRole('super_admin')) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Only administrators can create users'
@@ -153,7 +153,7 @@ class UserController extends Controller
         try {
             $user = Auth::user();
             
-            if ($user->role !== 'super_admin') {
+            if (!$user->hasRole('super_admin')) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Only administrators can view user details'
@@ -191,7 +191,7 @@ class UserController extends Controller
         try {
             $user = Auth::user();
             
-            if ($user->role !== 'super_admin') {
+            if (!$user->hasRole('super_admin')) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Only administrators can update users'
@@ -271,7 +271,7 @@ class UserController extends Controller
         try {
             $user = Auth::user();
             
-            if ($user->role !== 'super_admin') {
+            if (!$user->hasRole('super_admin')) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Only administrators can delete users'
@@ -317,7 +317,7 @@ class UserController extends Controller
         try {
             $user = Auth::user();
             
-            if ($user->role !== 'super_admin') {
+            if (!$user->hasRole('super_admin')) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Only administrators can change user roles'
@@ -372,7 +372,7 @@ class UserController extends Controller
         try {
             $user = Auth::user();
             
-            if ($user->role !== 'super_admin') {
+            if (!$user->hasRole('super_admin')) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Only administrators can ban users'
@@ -415,7 +415,7 @@ class UserController extends Controller
         try {
             $user = Auth::user();
             
-            if ($user->role !== 'super_admin') {
+            if (!$user->hasRole('super_admin')) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Only administrators can unban users'
@@ -449,7 +449,7 @@ class UserController extends Controller
         try {
             $user = Auth::user();
             
-            if ($user->role !== 'super_admin') {
+            if (!$user->hasRole('super_admin')) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Only administrators can view user statistics'

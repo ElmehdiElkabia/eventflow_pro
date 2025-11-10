@@ -21,7 +21,7 @@ class ReviewController extends Controller
             $query = Review::with(['event:id,title', 'user:id,name']);
             
             // If user is not admin, only show their own reviews
-            if ($user->role !== 'super_admin') {
+            if (!$user->hasRole('super_admin')) {
                 $query->where('user_id', $user->id);
             }
             
@@ -214,7 +214,7 @@ class ReviewController extends Controller
             $review = Review::with(['event:id,title', 'user:id,name'])->findOrFail($id);
             
             // Check if user can view this review
-            if ($user->role !== 'super_admin' && $review->user_id !== $user->id) {
+            if (!$user->hasRole('super_admin') && $review->user_id !== $user->id) {
                 return response()->json([
                     'success' => false,
                     'message' => 'You can only view your own reviews'
@@ -246,7 +246,7 @@ class ReviewController extends Controller
             $review = Review::findOrFail($id);
             
             // Check if user can edit this review
-            if ($user->role !== 'super_admin' && $review->user_id !== $user->id) {
+            if (!$user->hasRole('super_admin') && $review->user_id !== $user->id) {
                 return response()->json([
                     'success' => false,
                     'message' => 'You can only edit your own reviews'
@@ -302,7 +302,7 @@ class ReviewController extends Controller
             $review = Review::findOrFail($id);
             
             // Check if user can delete this review
-            if ($user->role !== 'super_admin' && $review->user_id !== $user->id) {
+            if (!$user->hasRole('super_admin') && $review->user_id !== $user->id) {
                 return response()->json([
                     'success' => false,
                     'message' => 'You can only delete your own reviews'
@@ -333,7 +333,7 @@ class ReviewController extends Controller
         try {
             $user = Auth::user();
             
-            if ($user->role !== 'super_admin') {
+            if (!$user->hasRole('super_admin')) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Only administrators can approve reviews'
@@ -366,7 +366,7 @@ class ReviewController extends Controller
         try {
             $user = Auth::user();
             
-            if ($user->role !== 'super_admin') {
+            if (!$user->hasRole('super_admin')) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Only administrators can reject reviews'
@@ -399,7 +399,7 @@ class ReviewController extends Controller
         try {
             $user = Auth::user();
             
-            if ($user->role !== 'super_admin') {
+            if (!$user->hasRole('super_admin')) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Only administrators can view review statistics'

@@ -112,7 +112,7 @@ class AnalyticsController extends Controller
 			$timeframe = $request->get('timeframe', '30'); // days
 			$startDate = Carbon::now()->subDays($timeframe);
 
-			if ($user->role === 'super_admin') {
+			if ($user->hasRole('super_admin')) {
 				// Admin sees all analytics
 				$dashboardData = $this->getAdminDashboardData($startDate);
 			} elseif ($user->role === 'organizer') {
